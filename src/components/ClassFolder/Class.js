@@ -7,14 +7,15 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import Button from '@material-ui/core/Button';
 
-export default class Teacher extends Component {
+
+export default class Class extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: "",
-            role: "Teacher",
-            class: "",
+            subject: "",
+            teacher: "",
             id: 0,
+            isEditing: false,
             //students: []
         }
     }
@@ -25,14 +26,14 @@ export default class Teacher extends Component {
         });
     }
 
-    submitTeacher = (event) => {
+    submitClass = (event) => {
         event.preventDefault();
-        this.props.addTeacher(this.state);
+        this.props.addClass(this.state);
         this.setState({
-            name: "",
-            role: "Teacher",
+            subject: "",
+            teacher: "",
             id: 0,
-            class: ""
+            isEditing: false,
         })
     }
 
@@ -41,11 +42,11 @@ export default class Teacher extends Component {
             <form>
                 <TextField
                     required
-                    id="nameT"
-                    name="name"
-                    label="Name"
-                    placeholder="Name"
-                    value={this.state.name}
+                    id="subject"
+                    name="subject"
+                    label="Subject"
+                    placeholder="Subject"
+                    value={this.state.subject}
                     variant="outlined"
                     InputLabelProps={{
                         shrink: true,
@@ -54,11 +55,11 @@ export default class Teacher extends Component {
                 />
                 <TextField
                     required
-                    id="class"
-                    name="class"
-                    label="Class"
-                    placeholder="Choose class"
-                    value={this.state.class}
+                    id="teacher"
+                    name="teacher"
+                    label="Teacher"
+                    placeholder="Choose teacher"
+                    value={this.state.teacher}
                     variant="outlined"
                     InputLabelProps={{
                         shrink: true,
@@ -67,7 +68,7 @@ export default class Teacher extends Component {
                 />
                 <TextField
                     required
-                    id="idT"
+                    id="idC"
                     name="id"
                     label="Class ID"
                     placeholder="Class ID"
@@ -84,12 +85,11 @@ export default class Teacher extends Component {
                     <Button
                         variant="contained"
                         color="primary"
-                        onClick={(event) => this.submitTeacher(event)}
+                        onClick={(event) => this.submitClass(event)}
                     >+ Add Class
                     </Button>
                 </div>
             </form>
         )
     }
-
 }

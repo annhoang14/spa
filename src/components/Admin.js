@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 
-import AllTeachers from "./AllTeachers.js";
-import AllStudents from "./AllStudents.js";
-import AllClasses from "./AllClasses.js";
+import AllTeachers from "./TeacherFolder/AllTeachers.js";
+import AllStudents from "./StudentsFolder/AllStudents.js";
+import AllClasses from "./ClassFolder/AllClasses.js";
 
 import * as firebase from 'firebase';
 
@@ -27,6 +27,7 @@ export default class Admin extends Component {
                     class: "",
                     isEnrolled: true,
                     role: "Student",
+                    isEditing: false,
                 },
             ],
 
@@ -49,12 +50,74 @@ export default class Admin extends Component {
         this.setState({ isExamineT: false, isExamineS: false, isExamineC: false })
     }
 
+    toggleEditing = personToEdit => {
+        if (personToEdit.role === "Student") {
+            this.setState({
+                allStudents: this.state.allStudents.map(student => {
+                    if (student.id === personToEdit.id) {
+                        return ({
+                            ...student, //return all the other fields as the same
+                            isEditing: !student.isEditing //toggle isEditing field to the opposite
+                        })
+                    }
+                    return student;
+                })
+            })
+        }
+        else {
+            this.setState({
+                allTeachers: this.state.allTeachers.map(teacher => {
+                    if (teacher.id === personToEdit.id) {
+                        return ({
+                            ...teacher, //return all the other fields as the same
+                            isEditing: !teacher.isEditing //toggle isEditing field to the opposite
+                        })
+                    }
+                    return teacher;
+                })
+            })
+        }
+    };
+
+    editPerson = (event, personToEdit) => {
+        const target = event.target;
+        const value = target.value;
+        const name = target.name; //either title or descr
+
+        if (personToEdit.role === "Student") {
+            this.setState({
+                allStudents: this.state.allStudents.map(student => {
+                    if (student.id === personToEdit.id) {
+                        return {
+                            ...student,
+                            [name]: value,
+                        }
+                    }
+                    return student;
+                })
+            })
+        } else {
+            this.setState({
+                allTeachers: this.state.allTeachers.map(teacher => {
+                    if (teacher.id === personToEdit.id) {
+                        return {
+                            ...teacher,
+                            [name]: value,
+                        }
+                    }
+                    return teacher;
+                })
+            })
+        }
+    };
+
     addTeacher = (state) => {
         var newTeacher = {
             name: state.name,
             role: state.role,
             id: state.id,
-            class: state.class
+            class: state.class,
+            isEditing: false,
         }
         this.setState(prevState => {
             return ({
@@ -62,6 +125,7 @@ export default class Admin extends Component {
             })
         })
     }
+
     deleteAllTeachers = () => {
         let resetArr = []
         this.setState(prevState => {
@@ -81,6 +145,7 @@ export default class Admin extends Component {
             class: state.class,
             isEnrolled: state.isEnrolled,
             role: state.role,
+            isEditing: false,
         };
         this.setState(prevState => {
             return ({
@@ -104,6 +169,7 @@ export default class Admin extends Component {
             subject: state.subject,
             teacher: state.teacher,
             id: state.id,
+            isEditing: false,
         }
         this.setState(prevState => {
             return ({
@@ -121,6 +187,66 @@ export default class Admin extends Component {
         })
     }
 
+    toggleEditClass = classToEdit => {
+        this.setState({
+            allClasses: this.state.allClasses.map(classItem => {
+                if (classItem.id === classToEdit.id) {
+                    return ({
+                        ...classItem, //return all the other fields as the same
+                        isEditing: !classItem.isEditing //toggle isEditing field to the opposite
+                    })
+                }
+                return classItem;
+            })
+        })
+    }
+
+    editClass = (event, classToEdit) => {
+        const target = event.target;
+        const value = target.value;
+        const name = target.name; //either title or descr
+        this.setState({
+            allClasses: this.state.allClasses.map(classItem => {
+                if (classItem.id === classToEdit.id) {
+                    return {
+                        ...classItem,
+                        [name]: value,
+                    }
+                }
+                return classItem;
+            })
+        })
+    }
+
+    deleteIndiv = (indiv) => {
+        if (indiv.role) {
+            if (indiv.role === "Student") {
+                const newStudentsList = this.state.allStudents.filter(student =>
+                    student.id !== indiv.id
+                );
+                this.setState(prevState => {
+                    return ({
+                        allStudents: newStudentsList
+                    })
+                })
+            } else {
+                let newTeachersList = this.state.allTeachers.filter(teacher =>
+                    teacher.id !== indiv.id
+                )
+                this.setState(prevState => {
+                    return ({ allTeachers: newTeachersList })
+                })
+            }
+        } else {
+            let newClassList = this.state.allClasses.filter(classItem =>
+                classItem.id !== indiv.id
+            )
+            this.setState(prevState => {
+                return ({ allClasses: newClassList })
+            })
+        }
+    }
+
     render() {
         return (
             <div className="App">
@@ -133,28 +259,28 @@ export default class Admin extends Component {
                         <Button
                             name="homeB"
                             color="inherit"
-                            onClick={this.toggleHome}
+                            onClick={() => this.toggleHome()}
                         > HOME
             </Button>
 
                         <Button
                             name="teacherB"
                             color="inherit"
-                            onClick={this.toggleExamineTeacher}
+                            onClick={() => this.toggleExamineTeacher()}
                         > Teachers
             </Button>
 
                         <Button
                             name="studentB"
                             color="inherit"
-                            onClick={this.toggleExamineStudent}
+                            onClick={() => this.toggleExamineStudent()}
                         > Students
             </Button>
 
                         <Button
                             name="classB"
                             color="inherit"
-                            onClick={this.toggleExamineClass}
+                            onClick={() => this.toggleExamineClass()}
                         > Classes
             </Button>
 
@@ -169,6 +295,9 @@ export default class Admin extends Component {
                                 allStudents={this.state.allStudents}
                                 addStudent={this.addStudent}
                                 deleteAllStudents={this.deleteAllStudents}
+                                toggleEditing={this.toggleEditing}
+                                editPerson={this.editPerson}
+                                deleteIndiv={this.deleteIndiv}
                             />
                         </div>
                         :
@@ -179,6 +308,9 @@ export default class Admin extends Component {
                                         allClasses={this.state.allClasses}
                                         addClass={this.addClass}
                                         deleteAllClasses={this.deleteAllClasses}
+                                        toggleEditClass={this.toggleEditClass}
+                                        editClass={this.editClass}
+                                        deleteIndiv={this.deleteIndiv}
                                     />
                                 </div>
                                 :
@@ -189,11 +321,14 @@ export default class Admin extends Component {
                                                 allTeachers={this.state.allTeachers}
                                                 addTeacher={this.addTeacher}
                                                 deleteAllTeachers={this.deleteAllTeachers}
+                                                toggleEditing={this.toggleEditing}
+                                                editPerson={this.editPerson}
+                                                deleteIndiv={this.deleteIndiv}
                                             />
                                         </div>
                                         :
                                         <div className="Home">
-                                            <h1>Welcome to TJ Elementary School Dashboard!</h1>
+                                            <h1>Welcome to TJ Elementary School Admin Dashboard!</h1>
                                         </div>
                                     }
                                 </div>

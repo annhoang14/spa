@@ -20,6 +20,7 @@ export default class Student extends Component {
             class: "",
             isEnrolled: false,
             role: "Student",
+            isEditing: false,
         }
     }
 
@@ -41,6 +42,7 @@ export default class Student extends Component {
             class: "",
             isEnrolled: false,
             role: "Student",
+            isEditing: false,
         })
     }
 
