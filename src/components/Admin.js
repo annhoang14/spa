@@ -37,6 +37,29 @@ export default class Admin extends Component {
         }
     }
 
+    // //writes asynchronously to database
+    // //waits for setState
+    // writeScoreToDB = async () => {
+    //     firebase.database().ref('admin').set({
+    //         allStudents: this.state.allStudents
+    //     });
+    //     firebase.database().ref('allTeachers').set({
+    //         allStudents: this.state.allTeachers
+    //     });
+
+    // }
+
+    // componentDidMount() {
+    //     const speedRef = firebase.database().ref('speedie');
+    //     speedRef.on('value', snap => {
+    //         console.log(snap.val())
+    //         this.setState({
+    //             speed: snap.val()
+    //         });
+    //     });
+
+    // }
+
     toggleExamineTeacher = () => {
         this.setState({ isExamineT: true, isExamineS: false, isExamineC: false })
     }
