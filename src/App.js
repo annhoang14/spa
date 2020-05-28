@@ -21,12 +21,12 @@ export default class App extends Component {
   //waits for setState
   writeScoreToDB = async () => {
     firebase.database().ref('speedie').set({
-      speed: 100
+      speed: 200
     });
   }
 
   componentDidMount() {
-    const speedRef = firebase.database().ref('speed');
+    const speedRef = firebase.database().ref('speedie');
     speedRef.on('value', snap => {
       console.log(snap.val())
       this.setState({
@@ -43,7 +43,7 @@ export default class App extends Component {
 
         {(this.state.isAdmin) ?
           <div>
-            {this.state.speed}
+            {/* {JSON.stringify(this.state.speed)} */}
             <Admin />
           </div>
           : <div><strong>You do not have access!</strong></div>
