@@ -10,34 +10,40 @@ export default class App extends Component {
   constructor() {
     super();
     this.state = {
-      speed: 10,
+      //speed: 10,
       isAdmin: true,
       isTeacher: false,
       isStudent: false,
     }
   }
+  /**
+   * speedie 
+   *    speed: field of speedie
+   *    whatever: an object nested inside speedie
+   *      whatevs: field of whatver
+   */
 
-  //writes asynchronously to database
-  //waits for setState
-  writeScoreToDB = async () => {
-    firebase.database().ref('speedie').set({
-      speed: 200
-    });
-  }
+  // //writes asynchronously to database
+  // //waits for setState
+  // writeScoreToDB = async () => {
+  //   firebase.database().ref('speedie/whatever').set({
+  //     whatevs: 200
+  //   });
+  // }
 
-  componentDidMount() {
-    const speedRef = firebase.database().ref('speedie');
-    speedRef.on('value', snap => {
-      console.log(snap.val())
-      this.setState({
-        speed: snap.val()
-      });
-    });
+  // componentDidMount() {
+  //   const speedRef = firebase.database().ref('speedie/whatever');
+  //   speedRef.on('value', snap => {
+  //     console.log(snap.val())
+  //     this.setState({
+  //       speed: snap.val()
+  //     });
+  //   });
 
-  }
+  // }
 
   render() {
-    this.writeScoreToDB()
+    //this.writeScoreToDB()
     return (
       <div className="App">
 
