@@ -1,0 +1,56 @@
+Basic Instructions:
+Using React, create a SPA for Thomas Jefferson Elementary School. 
+They need an admin dashboard that will let the staff manage student 
+enrollment (enroll, assign class and teacher, 
+basic information of the student). 
+Use Firebase to keep track of the different people 
+(student, admin, teacher) 
+and what class the teachers and students are assigned.
+
+Next steps:
+Add Firebase authentication so that only admins can log in and 
+change the page
+
+Allow teachers to log in and see a view-only 
+version of the dashboard that will let them see 
+what students are in which class and basic information 
+about the students
+Make it pretty
+Host it
+
+
+BASIC COMPONENTS:
+admin
+    fields:
+        name
+        role: admin
+
+    actions:
+        assign class to students 
+        assign class to teachers
+        assign students to teachers
+        can see/change basic info of students
+        can add/delete new students
+        can add/delete new teachers
+
+teacher
+    fields:
+        name
+        role: teacher
+        class:
+    actions:
+        see students' info in class only
+student
+    fields:
+        name
+        age
+        address
+        grade
+        class
+        isEnrolled
+        
+
+
+
+
+        
