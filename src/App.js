@@ -2,8 +2,6 @@ import React, { Component } from "react";
 
 import Admin from "./components/Admin.js";
 
-import firebase from "./firebase.js"
-
 import './App.css';
 
 export default class App extends Component {
